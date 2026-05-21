@@ -1,0 +1,11 @@
+module.exports = async (sock, msg) => {
+    const jokes = [
+        "Por que o Java morreu? Porque tomou NullPointer 😭",
+        "Sou tão rápido que até o lag me pede desculpa",
+        "Programador não dorme, entra em loop infinito"
+    ];
+
+    const joke = jokes[Math.floor(Math.random() * jokes.length)];
+
+    await sock.sendMessage(msg.key.remoteJid, { text: joke });
+};

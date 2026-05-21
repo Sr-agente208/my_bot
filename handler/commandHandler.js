@@ -1,28 +1,33 @@
 const fs = require("fs");
+const path = require("path");
+const config = require("../config");
 
 async function handleMessage(sock, msg) {
     const text =
-        msg.message.conversation ||
-        msg.message.extendedTextMessage?.text;
+        msg.message?.conversation ||
+        msg.message?.extendedTextMessage?.text;
 
     if (!text) return;
 
-    const prefix = "!";
-    if (!text.startsWith(prefix)) return;
+    if (!text.startsWith(config.prefix)) return;
 
-    const args = text.slice(1).trim().split(" ");
+    const args = text.slice(config.prefix.length).trim().split(" ");
     const command = args.shift().toLowerCase();
 
-    const commandFile = `../commands/${command}.js`;
+    const folders = ["utils", "fun", "group", "admin"];
 
-    if (fs.existsSync(commandFile)) {
-        const cmd = require(commandFile);
-        await cmd(sock, msg, args);
-    } else {
-        await sock.sendMessage(msg.key.remoteJid, {
-            text: "❌ comando não existe"
-        });
+    for (const folder of folders) {
+        const filePath = path.join(__dirname, `../commands/${folder}/${command}.js`);
+
+        if (fs.existsSync(filePath)) {
+            const cmd = require(filePath);
+            return cmd(sock, msg, args);
+        }
     }
+
+    await sock.sendMessage(msg.key.remoteJid, {
+        text: "❌ comando não encontrado"
+    });
 }
 
 module.exports = { handleMessage };

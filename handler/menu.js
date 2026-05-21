@@ -1,11 +1,19 @@
 module.exports = async (sock, msg) => {
     await sock.sendMessage(msg.key.remoteJid, {
         text: `
-🤖 MENU DO BOT
+🤖 SAKURA BOT MENU
 
-!ping → testar bot
-!hi → saudação
-!menu → ver comandos
+🧰 Utils:
+!ping !menu !info
+
+🎮 Fun:
+!dado !piada
+
+👥 Grupo:
+!tagall !link
+
+👑 Admin:
+!kick !ban
 `
     });
 };

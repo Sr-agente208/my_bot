@@ -1,0 +1,14 @@
+module.exports = async (sock, msg) => {
+    const metadata = await sock.groupMetadata(msg.key.remoteJid);
+
+    let text = "📢 MARCAÇÃO GERAL:\n\n";
+
+    metadata.participants.forEach(p => {
+        text += `@${p.id.split("@")[0]}\n`;
+    });
+
+    await sock.sendMessage(msg.key.remoteJid, {
+        text,
+        mentions: metadata.participants.map(p => p.id)
+    });
+};

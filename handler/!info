@@ -1,0 +1,5 @@
+module.exports = async (sock, msg) => {
+    await sock.sendMessage(msg.key.remoteJid, {
+        text: "Sakura BOT v1 ⚡ | feito com Baileys"
+    });
+};

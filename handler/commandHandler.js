@@ -14,15 +14,11 @@ async function handleMessage(sock, msg) {
     const args = text.slice(config.prefix.length).trim().split(" ");
     const command = args.shift().toLowerCase();
 
-    const folders = ["utils", "fun", "group", "admin"];
+    const commandPath = path.join(__dirname, "../commands", `${command}.js`);
 
-    for (const folder of folders) {
-        const filePath = path.join(__dirname, `../commands/${folder}/${command}.js`);
-
-        if (fs.existsSync(filePath)) {
-            const cmd = require(filePath);
-            return cmd(sock, msg, args);
-        }
+    if (fs.existsSync(commandPath)) {
+        const cmd = require(commandPath);
+        return cmd(sock, msg, args);
     }
 
     await sock.sendMessage(msg.key.remoteJid, {

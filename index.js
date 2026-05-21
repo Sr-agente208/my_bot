@@ -15,13 +15,12 @@ async function startBot() {
 
     sock.ev.on("messages.upsert", async ({ messages }) => {
         const msg = messages[0];
-
         if (!msg.message) return;
 
         await handleMessage(sock, msg);
     });
 
-    console.log("🤖 Bot rodando...");
+    console.log("🤖 Bot online");
 }
 
 startBot();
